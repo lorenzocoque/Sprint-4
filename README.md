@@ -56,7 +56,7 @@ A solução conecta e integra:
 1. **ESP32 + Botões (Wokwi):** capta as ações físicas realizadas pelo usuário (como gols, cartões e tempo de jogo).  
 2. **MQTT + Azure:** os eventos gerados pelo ESP32 são transmitidos via protocolo MQTT para uma máquina virtual na Azure, responsável pelo processamento e encaminhamento dos dados.  
 3. **Google Colab (Python):** um script em Python recebe os dados, processa-os e atualiza dinamicamente a interface do placar desenvolvida em HTML e CSS.  
-4. **Postman:** o arquivo `score atualizado.json` permite testar endpoints e validar a comunicação entre os serviços de forma modular.  
+4. **Postman:** o arquivo `Placar.Atualizado.json` permite testar endpoints e validar a comunicação entre os serviços de forma modular.  
 
 ---
 
@@ -65,7 +65,7 @@ A solução conecta e integra:
 - 💻 Computador com acesso ao **Google Colab**  
 - ☁️ Conexão com a **máquina virtual na Azure**  
 - [🎮 Simulador **Wokwi ESP32**](https://wokwi.com/projects/442288825722106881)  
-- 🧰 **Postman** com o arquivo `score atualizado.json` importado  
+- 🧰 **Postman** com o arquivo `Placar.Atualizado.json` importado  
 - 🌐 Navegador para visualização do placar em tempo real  
 
 ---
@@ -83,14 +83,14 @@ A solução conecta e integra:
 ---
 
 ### 2️⃣ Execução no Google Colab
-1. Abra o arquivo `Untitled2.ipynb` no **Google Colab**.  
+1. Abra o arquivo `Colab.txt` no **Google Colab**.  
 2. Execute as células para conectar o ambiente ao **ESP32** via **MQTT** e **endereço IP da Azure**.  
 3. O placar será atualizado em tempo real conforme as interações realizadas nos botões.  
 
 ---
 
 ### 3️⃣ Testes no Postman
-1. Importe o arquivo `score atualizado.json` no **Postman**.  
+1. Importe o arquivo `Placar.Atualizado.json` no **Postman**.  
 2. Utilize os endpoints disponíveis para testar eventos simulados e verificar logs de atualização.  
 
 ---
