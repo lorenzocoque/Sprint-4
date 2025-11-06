@@ -1,0 +1,1215 @@
+{
+  "info": {
+    "_postman_id": "8af12321-1427-4b0f-9b04-5f7f2d06bbc8",
+    "name": "FIWARE Scoreboard (Gerenciador de Jogos)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "179747"
+  },
+  "item": [
+    {
+      "name": "IOT Agent MQTT",
+      "item": [
+        {
+          "name": "1.1 Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{url}}:4041/iot/about",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "4041",
+              "path": [
+                "iot",
+                "about"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Provisioning a Service Group for MQTT",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"services\": [\n    {\n      \"apikey\": \"TEF\",\n      \"cbroker\": \"http://{{url}}:1026\",\n      \"entity_type\": \"Thing\",\n      \"resource\": \"\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://{{url}}:4041/iot/services",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "4041",
+              "path": [
+                "iot",
+                "services"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2.1 Health Check Services",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://{{url}}:4041/iot/services",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "4041",
+              "path": [
+                "iot",
+                "services"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2.1 Delete a Service Group",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "fiware-service",
+                "value": "smart"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{url}}:4041/iot/services/?resource=&apikey=TEF",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "4041",
+              "path": [
+                "iot",
+                "services",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "",
+                  "description": "The path that the IoT Agent had been listening on"
+                },
+                {
+                  "key": "apikey",
+                  "value": "TEF"
+                }
+              ]
+            },
+            "description": "This example removes a provisioned service group by making a DELETE request to the `/iot/services/` endpoint.\n\nIt means that requests to `http://iot-agent:7896/iot/d?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov`\n(where the IoT Agent is listening for **Northbound** communications) should no longer be processed by the IoT Agent. \nThe `apiKey` and `resource` parameters must be supplied in order to identify the service group to be deleted."
+          },
+          "response": []
+        },
+        {
+          "name": "3. Provisioning Scoreboard Device",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"score001\",\n      \"entity_name\": \"urn:ngsi-ld:Score:001\",\n      \"entity_type\": \"Score\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"MQTT\",\n      \"commands\": [\n        {\n          \"name\": \"ga_add\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"ga_sub\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"gb_add\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"gb_sub\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"y_add\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"y_sub\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"r_add\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"r_sub\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"timer_toggle\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"timer_reset\",\n          \"type\": \"command\"\n        }\n      ],\n      \"attributes\": [\n        {\n          \"object_id\": \"gA\",\n          \"name\": \"gA\",\n          \"type\": \"Integer\"\n        },\n        {\n          \"object_id\": \"gB\",\n          \"name\": \"gB\",\n          \"type\": \"Integer\"\n        },\n        {\n          \"object_id\": \"y\",\n          \"name\": \"y\",\n          \"type\": \"Integer\"\n        },\n        {\n          \"object_id\": \"r\",\n          \"name\": \"r\",\n          \"type\": \"Integer\"\n        },\n        {\n          \"object_id\": \"run\",\n          \"name\": \"run\",\n          \"type\": \"Integer\"\n        },\n        {\n          \"object_id\": \"t\",\n          \"name\": \"t\",\n          \"type\": \"Text\"\n        },\n        {\n          \"object_id\": \"online\",\n          \"name\": \"online\",\n          \"type\": \"Integer\"\n        }\n      ]\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://{{url}}:4041/iot/devices",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "4041",
+              "path": [
+                "iot",
+                "devices"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Registering Score Commands",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Score Commands\",\n  \"dataProvided\": {\n    \"entities\": [\n      {\n        \"id\": \"urn:ngsi-ld:Score:001\",\n        \"type\": \"Score\"\n      }\n    ],\n    \"attrs\": [\n      \"ga_add\",\n      \"ga_sub\",\n      \"gb_add\",\n      \"gb_sub\",\n      \"y_add\",\n      \"y_sub\",\n      \"r_add\",\n      \"r_sub\",\n      \"timer_toggle\",\n      \"timer_reset\"\n    ]\n  },\n  \"provider\": {\n    \"http\": {\n      \"url\": \"http://{{url}}:4041\"\n    },\n    \"legacyForwarding\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "http://{{url}}:1026/v2/registrations",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "registrations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6.5 Send Command: timer_reset",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timer_reset\": {\n    \"type\": \"command\",\n    \"value\": \"\"\n  }\n}"
+            },
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities/urn:ngsi-ld:Score:001/attrs",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities",
+                "urn:ngsi-ld:Score:001",
+                "attrs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6.4 Send Command: timer_toggle",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timer_toggle\": {\n    \"type\": \"command\",\n    \"value\": \"\"\n  }\n}"
+            },
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities/urn:ngsi-ld:Score:001/attrs",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities",
+                "urn:ngsi-ld:Score:001",
+                "attrs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6.3 Send Command: r_add",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"r_add\": {\n    \"type\": \"command\",\n    \"value\": \"\"\n  }\n}"
+            },
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities/urn:ngsi-ld:Score:001/attrs",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities",
+                "urn:ngsi-ld:Score:001",
+                "attrs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6.2 Send Command: y_add",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"y_add\": {\n    \"type\": \"command\",\n    \"value\": \"\"\n  }\n}"
+            },
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities/urn:ngsi-ld:Score:001/attrs",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities",
+                "urn:ngsi-ld:Score:001",
+                "attrs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6.1 Send Command: gb_add",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"gb_add\": {\n    \"type\": \"command\",\n    \"value\": \"\"\n  }\n}"
+            },
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities/urn:ngsi-ld:Score:001/attrs",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities",
+                "urn:ngsi-ld:Score:001",
+                "attrs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. List all Devices Provisioned",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://{{url}}:4041/iot/devices",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "4041",
+              "path": [
+                "iot",
+                "devices"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6. Send Command: ga_add (example)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ga_add\": {\n    \"type\": \"command\",\n    \"value\": \"\"\n  }\n}"
+            },
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities/urn:ngsi-ld:Score:001/attrs",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities",
+                "urn:ngsi-ld:Score:001",
+                "attrs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7. Read Attribute gA",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              },
+              {
+                "key": "accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities/urn:ngsi-ld:Score:001/attrs/gA",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities",
+                "urn:ngsi-ld:Score:001",
+                "attrs",
+                "gA"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8. Read Attribute t (timer)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              },
+              {
+                "key": "accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities/urn:ngsi-ld:Score:001/attrs/t",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities",
+                "urn:ngsi-ld:Score:001",
+                "attrs",
+                "t"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8.1 Read Attribute gB",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities/urn:ngsi-ld:Score:001/attrs/gB",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities",
+                "urn:ngsi-ld:Score:001",
+                "attrs",
+                "gB"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8.2 Read Attribute y (yellow)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities/urn:ngsi-ld:Score:001/attrs/y",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities",
+                "urn:ngsi-ld:Score:001",
+                "attrs",
+                "y"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8.3 Read Attribute r (red)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities/urn:ngsi-ld:Score:001/attrs/r",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities",
+                "urn:ngsi-ld:Score:001",
+                "attrs",
+                "r"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "9. Delete Score Device in IoT Agent",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://{{url}}:4041/iot/devices/score001",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "4041",
+              "path": [
+                "iot",
+                "devices",
+                "score001"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "10. Delete Score Entity in Orion",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities/urn:ngsi-ld:Score:001",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities",
+                "urn:ngsi-ld:Score:001"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "Thing",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "STH-Comet",
+      "item": [
+        {
+          "name": "1. Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{url}}:8666/version",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "8666",
+              "path": [
+                "version"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Subscribe Score Attributes (gA,gB,t)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Notify STH-Comet of Score changes\",\n  \"subject\": {\n    \"entities\": [\n      {\n        \"id\": \"urn:ngsi-ld:Score:001\",\n        \"type\": \"Score\"\n      }\n    ],\n    \"condition\": {\n      \"attrs\": [\n        \"gA\",\n        \"gB\",\n        \"t\"\n      ]\n    }\n  },\n  \"notification\": {\n    \"http\": {\n      \"url\": \"http://{{url}}:8666/notify\"\n    },\n    \"attrs\": [\n      \"gA\",\n      \"gB\",\n      \"t\"\n    ],\n    \"attrsFormat\": \"legacy\"\n  }\n}"
+            },
+            "url": {
+              "raw": "http://{{url}}:1026/v2/subscriptions",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "subscriptions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Request gA History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://{{url}}:8666/STH/v1/contextEntities/type/Score/id/urn:ngsi-ld:Score:001/attributes/gA?lastN=30",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "8666",
+              "path": [
+                "STH",
+                "v1",
+                "contextEntities",
+                "type",
+                "Score",
+                "id",
+                "urn:ngsi-ld:Score:001",
+                "attributes",
+                "gA"
+              ],
+              "query": [
+                {
+                  "key": "lastN",
+                  "value": "30"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Request t (timer) History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://{{url}}:8666/STH/v1/contextEntities/type/Score/id/urn:ngsi-ld:Score:001/attributes/t?lastN=30",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "8666",
+              "path": [
+                "STH",
+                "v1",
+                "contextEntities",
+                "type",
+                "Score",
+                "id",
+                "urn:ngsi-ld:Score:001",
+                "attributes",
+                "t"
+              ],
+              "query": [
+                {
+                  "key": "lastN",
+                  "value": "30"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Orion Context Broker",
+      "item": [
+        {
+          "name": "1.Version",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{url}}:1026/version",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "version"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2.Create (Example Generic)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": \"urn:ngsi-ld:entity:001\",\r\n  \"type\": \"iot\",\r\n  \"temperature\": {\r\n  \"type\": \"float\",\r\n  \"value\": 0\r\n    }\r\n,\r\n  \"humidity\": {\r\n  \"type\": \"float\",\r\n  \"value\": 0\r\n\t}\r\n}\r\n\r\n  \r\n"
+            },
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities"
+              ]
+            },
+            "description": "cria entidade"
+          },
+          "response": []
+        },
+        {
+          "name": "3.Get ",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.Update (Example Generic)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"temperature\": {\r\n  \"type\": \"float\",\r\n  \"value\":35\r\n    }\r\n,\r\n  \"humidity\": {\r\n  \"type\": \"float\",\r\n  \"value\": 60\r\n\t}\r\n}\r\n"
+            },
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities/urn:ngsi-ld:entity:001/attrs",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities",
+                "urn:ngsi-ld:entity:001",
+                "attrs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5.Selective_update_temperature",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "95"
+            },
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities/urn:ngsi-ld:entity:001/attrs/temperature/value",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities",
+                "urn:ngsi-ld:entity:001",
+                "attrs",
+                "temperature",
+                "value"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6.Selective_update_humidity",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "10"
+            },
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities/urn:ngsi-ld:entity:001/attrs/humidity/value",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities",
+                "urn:ngsi-ld:entity:001",
+                "attrs",
+                "humidity",
+                "value"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7.Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "fiware-service",
+                "value": "smart",
+                "type": "text"
+              },
+              {
+                "key": "fiware-servicepath",
+                "value": "/",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "http://{{url}}:1026/v2/entities/urn:ngsi-ld:entity:001",
+              "protocol": "http",
+              "host": [
+                "{{url}}"
+              ],
+              "port": "1026",
+              "path": [
+                "v2",
+                "entities",
+                "urn:ngsi-ld:entity:001"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "Thing",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
